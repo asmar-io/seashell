@@ -14,13 +14,18 @@ import {
 const SIDEBAR_LINKS = [
 	{
 		icon: Home,
-		label: "Home",
-		href: "/",
+		label: "Creators",
+		href: "/creators",
 	},
 	{
 		icon: Shirt,
-		label: "Merch",
-		href: "/merch",
+		label: "Marketplace",
+		href: "/marketplace",
+	},
+	{
+		icon: LayoutDashboard,
+		label: "Post Content",
+		href: "/postcontent",
 	},
 ];
 
@@ -31,7 +36,7 @@ const Sidebar =  () => {
 			className='flex lg:w-1/5 flex-col gap-3 px-2 border-r sticky
     left-0 top-0 h-screen'
 		>
-			<Link to='/update-profile' className='max-w-fit'>
+			<Link to='/marketplace' className='max-w-fit'>
 				<Avatar className='mt-4 cursor-pointer'>
 					<AvatarImage src={ "/user-placeholder.png"} className='object-cover' />
 					<AvatarFallback>CN</AvatarFallback>
@@ -39,27 +44,17 @@ const Sidebar =  () => {
 			</Link>
 
 			<nav className='flex flex-col gap-3'>
-				{SIDEBAR_LINKS.map((link) => (
-					<Link
+				
+				   {SIDEBAR_LINKS.map((link) => (
+					 <Link
 						key={link.href}
 						to={link.href}
 						className='flex w-12 lg:w-full items-center gap-2 hover:bg-primary-foreground font-bold hover:text-primary px-2 py-1 rounded-full justify-center lg:justify-normal'
-					>
+				    	>
 						<link.icon className='w-6 h-6' />
 						<span className='hidden lg:block'>{link.label}</span>
-					</Link>
-				))}
-
-			
-					<Link
-						to={"/secret-dashboard"}
-						className='flex w-12 lg:w-full items-center gap-2 hover:bg-primary-foreground font-bold hover:text-primary px-2 py-1 rounded-full justify-center lg:justify-normal'
-					>
-						<LayoutDashboard className='w-6 h-6' />
-						<span className='hidden lg:block'>Dashboard</span>
-					</Link>
-				
-
+				     </Link>
+				     ))}
 				<DropdownMenu>
 					<div className='flex w-12 lg:w-full items-center gap-2 hover:bg-primary-foreground font-bold hover:text-primary px-2 py-1 rounded-full justify-center lg:justify-normal'>
 						<DropdownMenuTrigger className='flex items-center gap-2'>
@@ -72,7 +67,7 @@ const Sidebar =  () => {
 						<DropdownMenuLabel>My Account</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<Link to={"?prefilled_email=" + "a@gmail.com"}>
-							<DropdownMenuItem>Billing</DropdownMenuItem>
+							<DropdownMenuItem>Personal Info</DropdownMenuItem>
 						</Link>
 						
 					</DropdownMenuContent>

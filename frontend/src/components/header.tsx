@@ -1,3 +1,7 @@
+"use client";
+import { NavLink as Link } from "react-router";
+import { ConnectModal } from "@mysten/dapp-kit";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shell, Plus, ShoppingBag, Wallet, Copy, Check, UsersRound  } from "lucide-react";
 import { motion } from "framer-motion";
@@ -14,90 +18,59 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import { shortenAddress } from "@polymedia/suitcase-core";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const tabs = [
-  {
-    id: "marketplace",
-    label: "Creators",
-    icon: UsersRound,
-  },
-  {
-    id: "subscriptions",
-    label: "Subscriptions",
-    icon: ShoppingBag,
-  },
-  {
-    id: "my-nfts",
-    label: "My NFTs",
-    icon: Wallet,
-  },
-  {
-    id: "mint",
-    label: "My content",
-    icon: Plus,
-  },
+
+const navLinks : any = [
+  /*{
+    href: "https://github.com/Sahilgill24/SeaShell",
+    label: "Features",
+  },*/
 ];
 
-interface HeaderProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-
-}
-
-export function Header({
-  activeTab,
-  setActiveTab,
- 
-}: HeaderProps) {
+export function Header() {
+  
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 flex justify-center">
+      <div className="container flex h-14 items-center justify-between gap-8 px-4 border-l border-r">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
           className="flex items-center gap-2"
         >
-          <Shell className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold tracking-tight">SeaShell</span>
+          <Shell className="h-5 w-5 text-primary" />
+          <span className="text-lg font-bold tracking-tight">SeaShell</span>
         </motion.div>
-
-        <motion.div
+        <motion.nav
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex-1 max-w-md mx-8"
+          className="hidden md:flex gap-6"
         >
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-4">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <TabsTrigger
-                    key={tab.id}
-                    value={tab.id}
-                    className="flex items-center gap-2"
-                  >
-                    <Icon className="h-4 w-4" />
-                    {tab.label}
-                  </TabsTrigger>
-                );
-              })}
-            </TabsList>
-          </Tabs>
+          {navLinks.map((link: any) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className="text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </motion.nav>
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center gap-4"
+        >
+          <div className="flex gap-2 items-center">
+           <AccountInfo />
+          </div>
         </motion.div>
-        <div className="flex gap-2 items-center">
-          <AccountInfo />
-        </div>
       </div>
     </header>
   );
@@ -121,9 +94,16 @@ function AccountInfo() {
     }
   };
 
-  if (!currentAccount) return null;
-
+  if (!currentAccount) return  <ConnectModal
+            trigger={
+              <Button size="sm" className="rounded-full">
+                Get Started
+              </Button>
+            }
+          />;
+  
   return (
+    
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
@@ -178,5 +158,6 @@ function AccountInfo() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    
   );
 }

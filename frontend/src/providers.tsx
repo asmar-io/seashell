@@ -1,7 +1,5 @@
 import { BrowserRouter } from "react-router";
 import { ThemeProvider } from "./components/theme-provider";
-
-
 import {
   createNetworkConfig,
   SuiClientProvider,
@@ -25,11 +23,11 @@ function RegisterEnokiWallets() {
   useEffect(() => {
     if (!isEnokiNetwork(network)) return;
     const { unregister } = registerEnokiWallets({
-      apiKey: "enoki_public_f95fcebca592edfdcac5e97b11768802",
+      apiKey: "enoki_public_488a4f0bc8b2831b6a4ab43335f028f6",
       providers: {
         google: {
           clientId:
-            "250989217917-ch3gh5gs92q3i2d60cggpvtvo361vngg.apps.googleusercontent.com",
+            "seashell-google",
         },
         // Optional additional providers
         // facebook: { clientId: 'YOUR_FACEBOOK_CLIENT_ID' },
@@ -52,7 +50,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       <QueryClientProvider client={queryClient}>
         <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
           <RegisterEnokiWallets />
-          <WalletProvider>
+          <WalletProvider autoConnect>
             <BrowserRouter>{children}</BrowserRouter>
           </WalletProvider>
         </SuiClientProvider>

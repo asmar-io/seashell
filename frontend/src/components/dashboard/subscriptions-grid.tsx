@@ -8,12 +8,11 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Skeleton } from "../ui/skeleton";
 import { useNavigate } from "react-router"; // changed code
-import { packageId } from "@/lib/sample-data";
+import { packageId,module } from "@/lib/sample-data";
 
 const SubscriptionsGrid = () => {
   const { client, } = useSuiClientContext();
   const navigate = useNavigate(); // changed code
-  const currentaddress = useCurrentAccount();
   const currentAccount = useCurrentAccount();
   const [marketplaceNfts, setMarketplaceNfts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,7 +43,7 @@ const SubscriptionsGrid = () => {
         showContent: true,
         showType: true,
       },
-      filter: { StructType: `${packageId}::subscription::Subscription` },
+      filter: { StructType: `${packageId}::${module}::Subscription` },
     });
 
     return ownedobjects?.data;
@@ -90,7 +89,7 @@ const SubscriptionsGrid = () => {
             id: String(i),
             objectId: ofield.data.objectId,
             name: ofield.data.content.fields.creator_name,
-            creator: ofield.data.content.fields.creator_id,
+            creator: ofield.data.content.fields.creator_address,
             metadata: {
               description: ofield.data.content.fields.creator_description,
               price: ofield.data.content.fields.subscription_fee,

@@ -20,6 +20,7 @@ export function MarketplaceTab({ nfts, isLoading }: MarketplaceTabProps) {
     const blobs = await client.getDynamicFields({
       parentId: creatorRegistry,
     })
+    console.log("Fetched blobs:", blobs);
     blobs?.data?.forEach((field) => {
       objects_ids.push(field.objectId);
     });
@@ -63,7 +64,7 @@ export function MarketplaceTab({ nfts, isLoading }: MarketplaceTabProps) {
               id: String(i),
               objectId: ofield.data.objectId,
               name: ofield.data.content.fields.creator_name,
-              creator: ofield.data.content.fields.owner,
+              creator: ofield.data.content.fields.creator_address,
               metadata: {
                 description: ofield.data.content.fields.creator_description,
                 price: ofield.data.content.fields.subscription_fee,

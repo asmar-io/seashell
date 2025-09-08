@@ -7,15 +7,9 @@ import {
   Footer,
   TechnologiesSection
 } from "@/components/landing-page";
-import { useAccounts } from "@mysten/dapp-kit";
-import { Navigate } from "react-router";
 
 const HomePage = () => {
-  const accounts = useAccounts();
-
-  if (accounts.length > 0) {
-    return <Navigate to="/dashboard" />;
-  }
+ 
 
   return (
     <div className="flex min-h-screen flex-col">
