@@ -93,7 +93,16 @@ public fun creator_add_content(
     ctx: &mut TxContext,
 ) {
     let creator = dof::borrow_mut<address, Creator>(&mut creatorRegistry.id, ctx.sender());
-    df::add(&mut creator.id, blob_id, 0);
+    df::add<String, u64>(&mut creator.id, blob_id, 0);
+}
+
+public fun creator_delete_content(
+    creatorRegistry: &mut CreatorRegistry,
+    blob_id: String,
+    ctx: &mut TxContext,
+) {
+    let creator = dof::borrow_mut<address, Creator>(&mut creatorRegistry.id, ctx.sender());
+    df::remove<String, u64>(&mut creator.id, blob_id);
 }
 
 public fun subscribe_to_creator(
