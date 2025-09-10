@@ -27,7 +27,7 @@ function RegisterEnokiWallets() {
       providers: {
         google: {
           clientId:
-            "seashell-google",
+            "248382625117-as9fkfteombhta60632u0gshlqa4nmt6.apps.googleusercontent.com",
         },
         // Optional additional providers
         // facebook: { clientId: 'YOUR_FACEBOOK_CLIENT_ID' },
