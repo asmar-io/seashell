@@ -4,6 +4,7 @@ import { NFTDialog } from "@/components/dashboard/nft-dialog"
 import { Skeleton } from "@/components/ui/skeleton"
 import { motion } from "framer-motion"
 import type { NFT } from "@/lib/types"
+import { useNavigate } from "react-router";
 
 interface NFTGridProps {
   nfts: NFT[]
@@ -12,13 +13,19 @@ interface NFTGridProps {
 }
 
 export function NFTGrid({ nfts, isLoading = false, isMarketplace = true }: NFTGridProps) {
+  //@ts-ignore
   const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const navigate = useNavigate();
 
-  const handleNFTClick = (nft: NFT) => {
-    setSelectedNFT(nft)
-    setDialogOpen(true)
-  }
+
+   async function handleNFTClick(nft: any) {
+      console.log("NFT clicked:", nft);
+      const targetId = encodeURIComponent(nft.creator);
+      if (!targetId) return;
+      navigate(`/shell/${targetId}`);
+    }
+  
 
   if (isLoading) {
     return (

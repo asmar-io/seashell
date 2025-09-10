@@ -17,7 +17,6 @@ import {
 } from "@mysten/seal";
 import { fromHex, toHex } from "@mysten/sui/utils";
 import BaseLayout from "@/components/BaseLayout";
-import { Transaction } from "@mysten/sui/transactions";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import CoverImage from "@/components/CoverImage";
@@ -34,6 +33,8 @@ import { AdvancedVideo } from "@cloudinary/react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useLocalStorage } from "@uidotdev/usehooks";
+import { useSignAndExecuteTransaction, } from "@mysten/dapp-kit"
+import { Transaction } from "@mysten/sui/transactions"
 
 const CreatorPage = () => {
   const { client } = useSuiClientContext();
@@ -41,13 +42,14 @@ const CreatorPage = () => {
   const shellId = id ?? "";
   const { mutate: signPersonalMessage } = useSignPersonalMessage();
   const currentaccount = useCurrentAccount();
-  const tx = new Transaction();
   const sealnewclient = new SealClient({
     //@ts-ignore
     suiClient: client,
     serverConfigs: serverObjectIds.map((id) => ({ objectId: id, weight: 1 })),
     verifyKeyServers: false,
   });
+ 
+  const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
 
   const [creator, setCreator] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -70,25 +72,29 @@ const CreatorPage = () => {
     });
     //@ts-ignore
     const subscription = ownedobjects?.data.find((obj) => {return obj?.data?.content?.fields.creator_address === shellId;});
-    return subscription;
+    return subscription?.data;
   }
 
-  async function decode(blobId: string): Promise<ArrayBuffer> {
+  async function decode(blobId: string): Promise<any> {
     const AGGREGATOR = "https://aggregator.walrus-testnet.walrus.space";
     const retrieveurl = `${AGGREGATOR}/v1/blobs/${blobId}`;
-    const response = await axios({
+    try {
+      const response = await axios({
       method: "get",
       url: retrieveurl,
       responseType: "arraybuffer",
-    });
-    return response.data;
+      });
+      return response.data;
+    } catch (error) {
+         return null;
+    }
   }
 
-  async function fetchBlobs(creator_object: any): Promise<string[]> {
+  async function fetchBlobs(creator_object: any, subscription: any): Promise<string[]> {
     const blobs = await client.getDynamicFields({
       parentId: creator_object?.objectId as string,
     });
-
+    const tx= new Transaction();
     //@ts-ignore
       console.log(sessionKey);
       console.log(
@@ -102,7 +108,7 @@ const CreatorPage = () => {
         session_key = await SessionKey.create({
           address: currentaccount?.address || "",
           packageId: packageId,
-          ttlMin: 1,
+          ttlMin: 10,
           suiClient: client,
         });
         const message = session_key.getPersonalMessage();
@@ -138,6 +144,8 @@ const CreatorPage = () => {
       let blobId = blobs?.data[index].name.value as string;
       console.log("Blob Id", blobId);
       let encryptedData = await decode(blobId);
+      if(encryptedData == null)
+        continue;
       // Generate encryption ID
       const allowbytes = fromHex(
         creator_object.content?.fields?.creator_address
@@ -151,7 +159,7 @@ const CreatorPage = () => {
         arguments: [
           tx.pure.vector("u8", fromHex(encryptionid)),
           tx.object(
-            "0x2348d97998d0d2c7d82e751b1656fcaef26a048778706e1b19fa9daea8403edb"
+            subscription.objectId
           ),
           tx.object(creatorRegistry),
           tx.pure.address(creator_object.content?.fields?.creator_address),
@@ -220,9 +228,44 @@ const CreatorPage = () => {
     return blobs?.data;
   }
 
+  const handleSubscribe = async  () => {
+    // payment being completed 
+    console.log("Initiating payment to escrow...",creator);
+    const tx= new Transaction();
+    const coin = tx.splitCoins(tx.gas, [creator.content.fields.subscription_fee])
+    tx.moveCall({
+      target: `${packageId}::${module}::subscribe_to_creator`,
+      arguments: [
+        tx.object(creatorRegistry),
+        tx.pure.id(creator.content.fields.creator_address),
+        coin,
+        tx.object.clock()
+      ],
+    })
+    const val = await signAndExecuteTransaction({
+      transaction: tx,
+      chain: 'sui:testnet'
+    });
+    console.log("payment transaction:", val.digest);
+    toast.success("Subscribed successful!", {
+      description: `Transaction digest: ${val.digest}`,
+      duration: 4000,
+      position: "top-right",
+      action: {
+        label: "SuiScan",
+        onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${val.digest}`, '_blank')
+      },
+    });
+    setIsSubscribed(true);
+    const subscription = await fetchuserSubscriptions();
+    await fetchBlobs(creator,subscription);
+    return val.digest;
+  }
+
   useEffect(() => {
     async function loadCreator() {
       try {
+        setIsSubscribed(false);
         const creatorResponse = await fetchCreator(shellId);
         if (creatorResponse) {
           setCreator(creatorResponse);
@@ -236,7 +279,7 @@ const CreatorPage = () => {
           const subscription = await fetchuserSubscriptions();
           if (subscription) {
             setIsSubscribed(true);
-            await fetchBlobs(creatorResponse);
+            await fetchBlobs(creatorResponse,subscription);
           }
         }
       } catch (e) {
@@ -299,12 +342,10 @@ const CreatorPage = () => {
 
                 <div className="flex">
                   {!isSubscribed && (
-                    <Button asChild className="rounded-full flex gap-10">
-                      <Link to={"/pricing"}>
+                    <Button onClick={()=>handleSubscribe()} asChild className="rounded-full flex gap-10">
                         <span className="uppercase font-semibold tracking-wide">
                           Subscribe
                         </span>
-                      </Link>
                     </Button>
                   )}
 
