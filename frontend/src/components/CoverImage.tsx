@@ -1,6 +1,6 @@
 import { Heart, Image as ImageIcon, Video } from "lucide-react";
 
-const CoverImage = ({ adminName }: { adminName: string }) => {
+const CoverImage = ({ adminName, coverImage }: { adminName: string, coverImage: string }) => {
 	
 
 	function formatNumber(num: number) {
@@ -16,7 +16,7 @@ const CoverImage = ({ adminName }: { adminName: string }) => {
 	return (
 		<div className='h-44 overflow-hidden relative'>
 			<img
-				src={"/shadow-logo.png"}
+				src={coverImage}
 				className='h-full w-full object-cover select-none pointer-events-none absolute'
 				
 				alt='Horse Cover Image'

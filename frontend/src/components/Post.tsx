@@ -50,7 +50,7 @@ const Post = ({ post, isSubscribed, admin }: { post: string; isSubscribed: boole
 
 			{"image" === "image" && (
 				<div className='relative w-full pb-[56.25%] rounded-lg overflow-hidden'>
-					<img src={"/demo.png"} alt='Post Image' className='rounded-lg object-cover absolute'  />
+					<img src={post} alt='Post Image' className='rounded-lg object-cover absolute'  />
 				</div>
 			)}
 

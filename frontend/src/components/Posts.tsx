@@ -3,12 +3,11 @@ import Post from "./Post";
 import PostSkeleton from "./ui/PostSkeleton";
 
 
-const Posts = ({ isSubscribed, admin }: { isSubscribed: boolean; admin: String }) => {
-    
+const Posts = ({ isSubscribed, admin, posts }: { isSubscribed: boolean; admin: String, posts: [] }) => {
 	return (
 		<div>
 			{true &&
-				[1,2,3,4,5]?.map((post,i) => <Post key={i} post={post} admin={admin} isSubscribed={isSubscribed} />)}
+				posts?.map((post,i) => <Post key={i} post={post} admin={admin} isSubscribed={isSubscribed} />)}
 
 			{false && (
 				<div className='mt-10 px-3 flex flex-col gap-10'>

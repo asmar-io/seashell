@@ -20,7 +20,7 @@ const SIDEBAR_LINKS = [
 	{
 		icon: Shirt,
 		label: "Marketplace",
-		href: "/marketplace",
+		href: "/",
 	},
 	{
 		icon: LayoutDashboard,

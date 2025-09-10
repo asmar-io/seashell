@@ -2,18 +2,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CoverImage from "./CoverImage";
 import { Button } from "@/components/ui/button";
 import { NavLink as Link } from "react-router";
+import { useState } from "react";
 
-const UserProfile = () => {
-
+const UserProfile = (user : any) => {
 	return (
 		<div className='flex flex-col'>
-			<CoverImage adminName={'Coco'} />
+			<CoverImage adminName={"user"} />
 
 			<div className='flex flex-col p-4'>
 				<div className='flex flex-col md:flex-row gap-4 justify-between'>
 					<Avatar className='w-20 h-20 border-2 -mt-10'>
 						<AvatarImage src={"/monkey.jpg"} className='object-cover' />
-						<AvatarFallback>CN</AvatarFallback>
+						<AvatarFallback>{"user"}</AvatarFallback>
 					</Avatar>
 
 					<div className='flex'>
@@ -34,7 +34,7 @@ const UserProfile = () => {
 				</div>
 
 				<div className='flex flex-col mt-4'>
-					<p className='text-lg font-semibold'>{"Coco"}</p>
+					<p className='text-lg font-semibold'>{user?.content?.fields?.creator_name}</p>
 					<p className='text-sm mt-2 md:text-md'>
 						Discover daily tips and tricks for horse health and care, along with insights into my personal
 						routine with my horses. Subscribe now to gain access to exclusive content and become part of the
@@ -46,4 +46,5 @@ const UserProfile = () => {
 		</div>
 	);
 };
+
 export default UserProfile;

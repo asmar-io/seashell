@@ -141,7 +141,7 @@ fun approve_internal(id: vector<u8>, subscription: &Subscription, creatorRegistr
         return false
     };
   
-    if (clock.timestamp_ms() > subscription.created_at + creator.subscription_period) {
+    if (clock.timestamp_ms() < subscription.created_at + creator.subscription_period) {
         return false
     };
 
