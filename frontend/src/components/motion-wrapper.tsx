@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { motion, type MotionProps } from "framer-motion"
 import type { ReactNode } from "react"
 
@@ -155,6 +153,7 @@ export function StaggerContainer({ children, className, delay = 0, ...props }: M
 
 export function StaggerItem({ children, className, ...props }: MotionWrapperProps) {
   return (
+    //@ts-ignore
     <motion.div className={className} variants={staggerItem} {...props}>
       {children}
     </motion.div>

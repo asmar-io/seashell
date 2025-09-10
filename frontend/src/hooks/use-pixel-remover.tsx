@@ -1,13 +1,6 @@
 import { useRef, useState } from "react";
 import axios from "axios";
-import { MerkleTree } from "merkletreejs";
 import SHA256 from "crypto-js/sha256";
-import { fromHex, toHex } from '@mysten/sui/utils';
-import { SealClient, SessionKey, type SessionKeyType } from '@mysten/seal';
-
-
-
-
 
 /**
  * Given an array of hex‐encoded hash strings, build the next “level” of the tree
@@ -64,8 +57,10 @@ const usePixelRemover = () => {
   const [slicedBlocks, setSlicedBlocks] = useState<string[]>([]);
   const [merkleRoot, setMerkleRoot] = useState<string | null>(null);
   const [DecodedPayload, setDecodedPayload] = useState<any>(null);
+  //@ts-ignore
   const PUBLISHER = "https://publisher.walrus-testnet.walrus.space";
   const [obfuscatedImage, setObfuscatedImage] = useState<string | null>(null);
+  //@ts-ignore
   const [bob, setBOB] = useState<string | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);

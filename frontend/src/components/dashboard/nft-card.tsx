@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import type { NFT } from "@/lib/types";
 import { shortenAddress } from "@polymedia/suitcase-core";
 import { LockIcon } from "lucide-react";
-import axios from "axios";
-import { useSuiClientContext } from "@mysten/dapp-kit";
 
 interface NFTCardProps {
   nft: NFT;

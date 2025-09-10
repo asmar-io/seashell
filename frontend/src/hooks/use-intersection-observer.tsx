@@ -38,6 +38,6 @@ export function useIntersectionObserver({
       observer.disconnect()
     }
   }, [threshold, rootMargin, freezeOnceVisible])
-
+  //@ts-ignore
   return [isVisible, ref]
 }

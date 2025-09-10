@@ -56,11 +56,10 @@ fun init(otw: SEASHELL, ctx: &mut TxContext) {
         transfer::public_transfer(publisher, tx_context::sender(ctx));
         transfer::public_transfer(display, tx_context::sender(ctx));
 
-        transfer::transfer(
+        transfer::share_object(
             CreatorRegistry {
                 id: object::new(ctx),
-            },
-            tx_context::sender(ctx),
+            }
         );
 
 }

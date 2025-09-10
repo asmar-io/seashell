@@ -4,14 +4,15 @@ import { cn } from "@/lib/utils";
 import { Heart, ImageIcon, LockKeyholeIcon, MessageCircle, Trash } from "lucide-react";
 import { AdvancedVideo } from '@cloudinary/react'
 import { NavLink as Link } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "./ui/ScrollArea";
 import { Input } from "@/components/ui/input";
 import Comment from "./Comment";
 
-
+//@ts-ignore
 const Post = ({ post, isSubscribed, admin }: { post: string; isSubscribed: boolean; admin: any }) => {
+	//@ts-ignore
 	const [isLiked, setIsLiked] = useState(false);
 	const [comment, setComment] = useState("");
 	

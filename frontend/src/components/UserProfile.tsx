@@ -1,13 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import CoverImage from "./CoverImage";
 import { Button } from "@/components/ui/button";
 import { NavLink as Link } from "react-router";
-import { useState } from "react";
 
 const UserProfile = (user : any) => {
 	return (
 		<div className='flex flex-col'>
-			<CoverImage adminName={"user"} />
 
 			<div className='flex flex-col p-4'>
 				<div className='flex flex-col md:flex-row gap-4 justify-between'>

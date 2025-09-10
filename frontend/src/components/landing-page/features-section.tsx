@@ -8,7 +8,7 @@ import {
 } from "@/components/motion-wrapper";
 import { AnimatedText } from "./animated/animated-text";
 import { AnimatedCard } from "./animated/animated-card";
-import { Eye, Layers, Clock, Package2, Lock } from "lucide-react";
+import { Eye, Layers, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const features = [

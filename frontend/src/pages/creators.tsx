@@ -1,6 +1,4 @@
 import { SubscriptionsTab } from "@/components/dashboard";
-import { useAccounts } from "@mysten/dapp-kit";
-import { Navigate } from "react-router";
 import { Header } from "@/components/header";
 import BaseLayout from "@/components/BaseLayout";
 

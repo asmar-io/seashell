@@ -1,16 +1,15 @@
 import { HeroSection } from "@/components/dashboard/hero-section";
 import { NFTGrid } from "@/components/dashboard/nft-grid";
-import { usePixelRemover } from "@/hooks/use-pixel-remover";
 import { useSuiClientContext } from "@mysten/dapp-kit";
 import axios from "axios";
 //import { console } from "inspector";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { creatorRegistry } from "@/lib/sample-data";
 
 
 //@ts-ignore
 export function MarketplaceTab({ nfts, isLoading }: MarketplaceTabProps) {
-  const { client, network } = useSuiClientContext();
+  const { client } = useSuiClientContext();
 
   const [marketplaceNfts, setMarketplaceNfts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -34,6 +33,7 @@ export function MarketplaceTab({ nfts, isLoading }: MarketplaceTabProps) {
     return objects || [];
   }
   // this will now 
+  //@ts-ignore
   async function decoding(blobId: string): Promise<any> {
     const AGGREGATOR = "https://aggregator.walrus-testnet.walrus.space";
     const retrieveurl = `${AGGREGATOR}/v1/blobs/${blobId}`;

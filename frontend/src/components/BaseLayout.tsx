@@ -5,7 +5,6 @@ import Sidebar from "@/components/Sidebar";
 
 const BaseLayout = ({
 	children,
-	renderRightPanel = true,
 }: {
 	children: ReactNode;
 	renderRightPanel?: boolean;

@@ -13,12 +13,15 @@ interface AnimatedTextProps {
   as?: React.ElementType
 }
 
+
 export function AnimatedText({
   text,
   className,
   delay = 0,
+  //@ts-ignore
   duration = 0.05,
   staggerChildren = 0.02,
+  //@ts-ignore
   as: Component = "h2",
 }: AnimatedTextProps) {
   const words = text.split(" ")
@@ -62,6 +65,7 @@ export function AnimatedText({
       className={className}
     >
       {words.map((word, index) => (
+        //@ts-ignore
         <motion.span key={index} variants={child} style={{ marginRight: "0.25em", display: "inline-block" }}>
           {word}
         </motion.span>

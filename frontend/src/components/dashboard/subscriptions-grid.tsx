@@ -17,7 +17,7 @@ const SubscriptionsGrid = () => {
   const [marketplaceNfts, setMarketplaceNfts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-
+  //@ts-ignore.
   async function fetchBlobs(nft: any): Promise<string[]> {
     let objects_ids: string[] = [];
     const blobs = await client.getDynamicFields({
@@ -49,6 +49,7 @@ const SubscriptionsGrid = () => {
     return ownedobjects?.data;
   }
 
+  //@ts-ignore
   async function decode(blobId: string): Promise<any> {
     const AGGREGATOR = "https://aggregator.walrus-testnet.walrus.space";
     const retrieveurl = `${AGGREGATOR}/v1/blobs/${blobId}`;

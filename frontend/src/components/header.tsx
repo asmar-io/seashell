@@ -2,8 +2,7 @@
 import { NavLink as Link } from "react-router";
 import { ConnectModal } from "@mysten/dapp-kit";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shell, Plus, ShoppingBag, Wallet, Copy, Check, UsersRound  } from "lucide-react";
+import { Shell, Copy, Check  } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   useAccounts,
