@@ -1,6 +1,6 @@
 import { Heart, Image as ImageIcon, Video } from "lucide-react";
 
-const CoverImage = ({ adminName, coverImage }: { adminName: string, coverImage: string }) => {
+const CoverImage = ({ adminName, coverImage, contentCount, totalLikes }: { adminName: string, coverImage: string, contentCount: number, totalLikes: number }) => {
 	
 
 	function formatNumber(num: number) {
@@ -16,7 +16,7 @@ const CoverImage = ({ adminName, coverImage }: { adminName: string, coverImage: 
 	return (
 		<div className='h-44 overflow-hidden relative'>
 			<img
-				src={coverImage}
+				src={coverImage || "/seashell-logo.png"}
 				className='h-full w-full object-cover select-none pointer-events-none absolute'
 				
 				alt='Horse Cover Image'
@@ -34,19 +34,19 @@ const CoverImage = ({ adminName, coverImage }: { adminName: string, coverImage: 
 						<div className='flex gap-2 items-center'>
 							<div className='flex items-center gap-1'>
 								<ImageIcon className='w-4 h-4' />
-								<span className='text-sm font-bold'>{1}</span>
+								<span className='text-sm font-bold'>{contentCount}</span>
 							</div>
 
 							<span className='text-xs'>•</span>
 							<div className='flex items-center gap-1'>
 								<Video className='w-4 h-4' />
-								<span className='text-sm font-bold'>{2}</span>
+								<span className='text-sm font-bold'>{0}</span>
 							</div>
 
 							<span className='text-xs'>•</span>
 							<div className='flex items-center gap-1'>
 								<Heart className='w-4 h-4' />
-								<span className='text-sm font-bold'>{formatNumber(100)}</span>
+								<span className='text-sm font-bold'>{formatNumber(totalLikes)}</span>
 							</div>
 						</div>
 					</div>

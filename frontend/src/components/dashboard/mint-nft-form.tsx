@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FileUpload } from "../ui/file-upload";
 import { Button } from "../ui/button";
-import { usePixelRemover } from "@/hooks/use-pixel-remover";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
@@ -10,8 +9,9 @@ import {
   packageId,
   module,
   creatorAddContentFunction,
+  createCreatorFunction,
+  serverObjectIds
 } from "@/lib/sample-data";
-
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
@@ -22,32 +22,21 @@ import { SealClient,  } from "@mysten/seal";
 import { fromHex, toHex } from "@mysten/sui/utils";
 import axios from "axios";
 
-export function mintNFT() {}
-
-
 const MintNFTForm = () => {
   const [description, setDescription] = useState("");
   const [isMinting, setIsMinting] = useState(false);
   const [mintingStep, setMintingStep] = useState("");
   const currentAccount = useCurrentAccount();
   const PUBLISHER = "https://publisher.walrus-testnet.walrus.space";
-  const serverObjectIds = [
-    "0x73d05d62c18d9374e3ea529e8e0ed6161da1a141a94d3f76ae3fe4e99356db75",
-    "0xf5d14a81a982144ae441cd7d64b09027f116a468bd36e7eca494f750591623c8",
-  ];
-
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
-  // @ts-ignore
-  const { client, network } = useSuiClientContext();
-
+  const { client } = useSuiClientContext();
   const sealnewclient = new SealClient({
-    //@ts-ignore
     suiClient: client,
     serverConfigs: serverObjectIds.map((id) => ({ objectId: id, weight: 1 })),
     verifyKeyServers: false,
   });
-
-  const tx = new Transaction();
 
   async function encryption(
     data: Uint8Array,
@@ -70,8 +59,34 @@ const MintNFTForm = () => {
     return encryptedBytes;
   }
 
+  async function fetchCreator(): Promise<any> {
+    //let objects_ids: string[] = [];
+    let creator_object = await client.getDynamicFieldObject({
+      parentId: creatorRegistry,
+      name: { type: "address", value: currentAccount?.address },
+    });
+
+    return creator_object?.data;
+  }
+
   async function finalpublish() {
     if (isMinting) return; // Prevent multiple simultaneous minting attempts
+    
+    const tx = new Transaction();
+    const creator = await fetchCreator();
+    if(creator==null){
+      tx.moveCall({
+        target: `${packageId}::${module}::${createCreatorFunction}`,
+        arguments: [
+          tx.object(creatorRegistry),
+          tx.pure.string(''),
+          tx.pure.string(''),
+          tx.pure.string(''),
+          tx.pure.u64(100000),
+          tx.pure.u64(86400),
+        ],
+      });
+    }
 
     setIsMinting(true);
     setMintingStep("Starting minting process...");
@@ -143,18 +158,6 @@ const MintNFTForm = () => {
     }
   }
 
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-  const {
-    canvasRef,
-    outputSrc,
-  } = usePixelRemover();
-
-  useEffect(() => {
-    setImagePreview(outputSrc);
-  }, [outputSrc]);
-
   const handleFileChange = (files: File[]) => {
     if (files.length > 0) {
       setImage(files[0]);
@@ -166,6 +169,10 @@ const MintNFTForm = () => {
     e.preventDefault();
     finalpublish();
   };
+
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <div className="relative">
@@ -202,7 +209,6 @@ const MintNFTForm = () => {
         <div>
           <Label className="block font-medium mb-1">Image Preview</Label>
           <div className="w-full h-48 border rounded flex items-center justify-center overflow-hidden">
-            <canvas ref={canvasRef} className="hidden" />
             {imagePreview ? (
               <img
                 src={imagePreview}

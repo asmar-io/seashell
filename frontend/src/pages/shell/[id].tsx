@@ -327,8 +327,10 @@ const CreatorPage = () => {
         <BaseLayout>
           <div className="flex flex-col">
             <CoverImage
-              adminName={creator?.content?.fields?.creator_name}
+              adminName={creator?.content?.fields?.creator_name || creator?.content?.fields?.creator_address?.substring(0,4)}
               coverImage={creator?.content?.fields?.creator_image_url}
+              contentCount={images?.length}
+              totalLikes={0}
             />
             <div className="flex flex-col p-4">
               <div className="flex flex-col md:flex-row gap-4 justify-between">
@@ -337,7 +339,7 @@ const CreatorPage = () => {
                     src={creator?.content?.fields?.creator_image_url}
                     className="object-cover"
                   />
-                  <AvatarFallback>{"user"}</AvatarFallback>
+                  <AvatarFallback>{creator?.content?.fields?.creator_address?.substring(0,4)}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex">

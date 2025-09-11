@@ -25,7 +25,7 @@ export function NFTCard({ nft, onClick, delay = 0 }: NFTCardProps) {
         <CardContent className="p-0">
           <div className="relative">
             <img 
-              src={nft.image} 
+              src={nft.image || "/seashell-logo.png"} 
               alt={nft.name} 
               className="object-cover w-48 h-48" // fixed size, adjust as needed
               style={{ width: '350px', height: '350px' }} // fallback for non-Tailwind
@@ -41,7 +41,7 @@ export function NFTCard({ nft, onClick, delay = 0 }: NFTCardProps) {
           </div>
           <div className="p-4 space-y-3">
             <div>
-              <h3 className="font-semibold text-lg">{nft.name}</h3>
+              <h3 className="font-semibold text-lg">{nft.name || shortenAddress(nft?.creator)}</h3>
              {nft?.creator && <p className="text-sm text-muted-foreground">
                 by {shortenAddress(nft?.creator)}
               </p>}
@@ -51,7 +51,7 @@ export function NFTCard({ nft, onClick, delay = 0 }: NFTCardProps) {
             </div>
             {nft?.metadata?.price && (<div className="flex items-center justify-between">
               <div className="text-lg font-bold text-primary">
-                {nft?.metadata?.price} SUI
+                {nft?.metadata?.price / 10**9} SUI
               </div>
             </div>)}
             {nft?.metadata?.created_at && (<div className="flex items-center justify-between">

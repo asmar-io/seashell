@@ -33,6 +33,11 @@ public struct Subscription has key {
     creator_image_url: String,
 }
 
+public struct BlobInfo has store {
+    likes: u64,
+    description: String,
+}
+
 public struct SEASHELL has drop {}
 
 fun init(otw: SEASHELL, ctx: &mut TxContext) {
@@ -89,10 +94,13 @@ public fun create_creator(
 public fun creator_add_content(
     creatorRegistry: &mut CreatorRegistry,
     blob_id: String,
+    description: String,
     ctx: &mut TxContext,
 ) {
     let creator = dof::borrow_mut<address, Creator>(&mut creatorRegistry.id, ctx.sender());
-    df::add<String, u64>(&mut creator.id, blob_id, 0);
+    // adding likes, description, comments, as dynamic filed value
+    let blobinfo = BlobInfo {likes: 0, description: description};
+    df::add<String, BlobInfo>(&mut creator.id, blob_id, blobinfo);
 }
 
 public fun creator_delete_content(
